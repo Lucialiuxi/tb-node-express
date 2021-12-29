@@ -31,16 +31,16 @@ router.post('/createFile',function(req,res,next){
     // console.log(req.body)
     // console.log("新建文件夹")
     let userLoginName = req.body.userLoginName;
-    let FileName = req.body.FileName;
-    let FileAbstract = req.body.FileAbstract;
+    let fileName = req.body.fileName;
+    let fileAbstract = req.body.fileAbstract;
     let star = req.body.star;
     let fileId = req.body.fileId;
     let inRecycleBin = req.body.inRecycleBin;
-    if(FileName){
+    if(fileName){
         FileInfo.create({
             userLoginName:userLoginName,
-            FileName:  FileName,
-            FileAbstract: FileAbstract,
+            fileName:  fileName,
+            fileAbstract: fileAbstract,
             fileId: fileId,
             star: star,
             inRecycleBin: inRecycleBin
@@ -125,8 +125,8 @@ router.post('/ModifyFileInfo',function(req,res,next){
             fileId: fileId,
             userLoginName: userLoginName,
         },{
-            FileName:req.body.FileName,
-            FileAbstract:req.body.FileAbstract
+            fileName:req.body.fileName,
+            fileAbstract:req.body.fileAbstract
         },function(err,data){
             if(err){
                // console.log('err',err) 
@@ -145,7 +145,7 @@ router.post('/ModifyFileInfo',function(req,res,next){
 });
 
 //切换标星
-router.post('/ToggleFileStar',function(req,res,next){
+router.post('/ToggleFileStar',function(req, res){
     // console.log(req.body);
     // console.log('切换标星')
     let fileId = req.body.fileId;
@@ -173,7 +173,7 @@ router.post('/ToggleFileStar',function(req,res,next){
 });
 
 //移动文件到回收站
-router.post('/MoveFileToRecycleBin',function(req,res,next){
+router.post('/MoveFileToRecycleBin',function(req, res){
     // console.log('移动文件到回收站');
     let fileId = req.body.fileId;
     let userLoginName = req.body.userLoginName;
@@ -200,7 +200,7 @@ router.post('/MoveFileToRecycleBin',function(req,res,next){
 });
 
 //删除一个项目文件夹
-router.post('/DeleteAFlie',function(req,res,next){
+router.post('/DeleteAFlie',function(req,res){
     // console.log('删除回收站的文件夹');
     let fileId = req.body.fileId;
     let userLoginName = req.body.userLoginName;

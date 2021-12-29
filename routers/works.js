@@ -194,10 +194,10 @@ router.post('/GetAWorksFileInformationById',function(req,res){
 
 /**
  * 移动OR复制一个workFile到其他文件夹下 keyWord:'复制'/'移动'
- * @param { username: String , myId: String , keyWord:Sting , NewfileId: Number , NewParentId:String ,lastestModifyTime: Number} param
+ * @param { username: String , myId: String , keyWord:Sting , newfileId: Number , newParentId:String ,lastestModifyTime: Number} param
  */
 router.post('/MoveOrCopyOneWorkFile',function(req,res,next){
-    let { username, myId, keyWord, NewfileId, NewParentId, lastestModifyTime } = req.body;
+    let { username, myId, keyWord, newfileId, newParentId, lastestModifyTime } = req.body;
     if(myId){
         Works.find({
             myId,
@@ -211,8 +211,8 @@ router.post('/MoveOrCopyOneWorkFile',function(req,res,next){
                     Works.findOneAndUpdate({
                         myId
                     },{
-                        fileId: NewfileId,
-                        parentId: NewParentId,
+                        fileId: newfileId,
+                        parentId: newParentId,
                     },function(err, result) {
                         console.log("移动:err", err);
                         res.json({
@@ -225,8 +225,8 @@ router.post('/MoveOrCopyOneWorkFile',function(req,res,next){
             } else if (keyWord=== '复制') {
                 data.forEach(item => {
                     let newItem = {
-                        fileId: NewfileId,
-                        parentId: NewParentId,
+                        fileId: newfileId,
+                        parentId: newParentId,
                         myId: uuidv4(),
                         username,
                         workFileName:  item._doc.workFileName,

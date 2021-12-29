@@ -16,25 +16,9 @@ router.use(bodyParser.urlencoded({ extended: true }))
 //parse application/json
 router.use(bodyParser.json())
 
-/***
- * code:
- *      注册：
- *          0 注册的用户名已经存在
- *          1 注册成功
- *      登录：
- *          404 用户名不存在、密码错误
- *          200  登录成功
- *      新建项目文件夹：
- *          200  新建项目成功
- *      刷新：
- *          3 刷新获取数据成功
- *      
- */
 // 新建任务列表
-router.post('/CreateTaskItem',function(req,res,next){
-    let fileId = req.body.param.fileId;
-    let userLoginName = req.body.param.userLoginName;
-    let defaultTaskItem = req.body.arr;
+router.post('/CreateTaskItem',function(req, res){
+    const { fileId, param: { userLoginName }, arr: defaultTaskItem} = req.body;
     // console.log(defaultTaskItem[0])
     if(fileId){
         TaskItem.find({
