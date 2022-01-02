@@ -42,32 +42,36 @@ router.post('/usersRegister',function(req, res){
 //登录
 router.post('/userLogin',function(req, res){
     let { username, password } = req.body;
-    User.findOne({
-        username
-    },function(err,adventure){
-        if(err){
-            commonResponse(res, false, null, undefined, err);
-            return;
-        }
-        if(!adventure){
-            commonResponse(res, false, null, undefined, '用户名不存在');
-        }else{
-            User.findOne({
-                username,
-                password
-            },function(error,data){
-                if(error){
-                    commonResponse(res, false, null, undefined, err);
-                    return;
-                }
-                if(data){
-                    commonResponse(res, true, data, '登录成功');
-                }else{
-                    commonResponse(res, false, data, '密码错误');
-                }
-            })
-        }
-    })
+    if(username) {
+        User.findOne({
+            username
+        },function(err,adventure){
+            if(err){
+                commonResponse(res, false, null, undefined, err);
+                return;
+            }
+            if(!adventure){
+                commonResponse(res, false, null, undefined, '用户名不存在');
+            }else{
+                User.findOne({
+                    username,
+                    password
+                },function(error,data){
+                    if(error){
+                        commonResponse(res, false, null, undefined, err);
+                        return;
+                    }
+                    if(data){
+                        commonResponse(res, true, null, '登录成功');
+                    }else{
+                        commonResponse(res, false, null, '密码错误');
+                    }
+                })
+            }
+        });
+    } else {
+        commonResponse(res, false, null, undefined, '参数有误');
+    }
 });
 
 module.exports = router;

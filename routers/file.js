@@ -2,6 +2,7 @@
 let FileInfo = require('../models/fileItemInfoModel');
 let express = require('express');
 var router = express.Router();
+const { commonResponse } = require('./utils.js');
 
 //解析post请求主体的键值对
 const bodyParser = require('body-parser');
@@ -27,15 +28,8 @@ router.use(bodyParser.json())
  */
 
 //新建文件夹
-router.post('/createFile',function(req,res,next){
-    // console.log(req.body)
-    // console.log("新建文件夹")
-    let userLoginName = req.body.userLoginName;
-    let fileName = req.body.fileName;
-    let fileAbstract = req.body.fileAbstract;
-    let star = req.body.star;
-    let fileId = req.body.fileId;
-    let inRecycleBin = req.body.inRecycleBin;
+router.post('/createFile',function(req, res){
+    const { userLoginName, fileName, fileAbstract, star, fileId, inRecycleBin} = req.body;
     if(fileName){
         FileInfo.create({
             userLoginName:userLoginName,
@@ -45,20 +39,12 @@ router.post('/createFile',function(req,res,next){
             star: star,
             inRecycleBin: inRecycleBin
         },function(err,data){
-            // console.log(err,data)
             if(err){//错误
-                // console.log('err',err)
-                return;
+                commonResponse(res, false, null, undefined, err);
             }else{
-                res.json({
-                    success:true,
-                    code:200,
-                    message:'新建项目成功',
-                    lastestFileInfoData:data
-                })
+                commonResponse(res, true, data, '新建项目成功');
             }
-
-        }) 
+        });
     }
 
 });
@@ -88,30 +74,20 @@ router.post('/findAFileInfoServer',function(req,res,next){
 });
 
 //进入或者刷新大图标文件区的时候，请求文件数据
-router.post('/AllFilesInfo',function(req,res,next){
-    // console.log(req.body)
-    // console.log("刷新")
+router.post('/allFilesInfo',function(req, res){
     //前端发送过来的用户名存在，就查找用户名对应的数据
-    let userName = req.body.userLoginName;
-    if(userName){
+    let { userLoginName } = req.body;;
+    if(userLoginName){
         FileInfo.find({
-            userLoginName:userName
+            userLoginName,
         },function(err,data){
-            // console.log(err,data)
-            if(err){//错误
-                // console.log('err',err)
-                throw new Error(err)
+            if(err){
+                commonResponse(res, false, null, undefined, err);
             }else{
-                res.json({
-                    success:true,
-                    code:3,
-                    message:'刷新获取数据成功',
-                    AllFilesInfoData:data
-                })
+                commonResponse(res, true, data, '获取数据成功');
             }
-        })
+        });
     }
-    
 });
 
 //修改大图标文件的信息 
