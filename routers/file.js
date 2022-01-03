@@ -3,6 +3,7 @@ let FileInfo = require('../models/fileItemInfoModel');
 let express = require('express');
 var router = express.Router();
 const { commonResponse } = require('./utils.js');
+const { v1: uuidv1 } = require('uuid');
 
 //解析post请求主体的键值对
 const bodyParser = require('body-parser');
@@ -29,15 +30,16 @@ router.use(bodyParser.json())
 
 //新建文件夹
 router.post('/createFile',function(req, res){
-    const { userLoginName, fileName, fileAbstract, star, fileId, inRecycleBin} = req.body;
+    const { username, fileName, fileAbstract } = req.body;
+    
     if(fileName){
         FileInfo.create({
-            userLoginName:userLoginName,
-            fileName:  fileName,
-            fileAbstract: fileAbstract,
-            fileId: fileId,
-            star: star,
-            inRecycleBin: inRecycleBin
+            username,
+            fileName,
+            fileAbstract,
+            fileId: uuidv1(),
+            star: false,
+            inRecycleBin: false
         },function(err,data){
             if(err){//错误
                 commonResponse(res, false, null, undefined, err);
@@ -76,10 +78,10 @@ router.post('/findAFileInfoServer',function(req,res,next){
 //进入或者刷新大图标文件区的时候，请求文件数据
 router.post('/allFilesInfo',function(req, res){
     //前端发送过来的用户名存在，就查找用户名对应的数据
-    let { userLoginName } = req.body;;
-    if(userLoginName){
+    let { username } = req.body;;
+    if(username){
         FileInfo.find({
-            userLoginName,
+            username,
         },function(err,data){
             if(err){
                 commonResponse(res, false, null, undefined, err);
@@ -95,11 +97,11 @@ router.post('/ModifyFileInfo',function(req,res,next){
     // console.log('ModifyFileInfo',req.body)
     // console.log('修改大图标文件')
     let fileId = req.body.fileId;
-    let userLoginName = req.body.userLoginName;
+    let username = req.body.username;
     if(fileId){
         FileInfo.findOneAndUpdate({
             fileId: fileId,
-            userLoginName: userLoginName,
+            username: username,
         },{
             fileName:req.body.fileName,
             fileAbstract:req.body.fileAbstract
@@ -125,11 +127,11 @@ router.post('/ToggleFileStar',function(req, res){
     // console.log(req.body);
     // console.log('切换标星')
     let fileId = req.body.fileId;
-    let userLoginName = req.body.userLoginName;
+    let username = req.body.username;
     if(fileId){
         FileInfo.findOneAndUpdate({
             fileId: fileId,
-            userLoginName: userLoginName,
+            username: username,
         },{
             star:req.body.star
         },function(err,data){
@@ -152,11 +154,11 @@ router.post('/ToggleFileStar',function(req, res){
 router.post('/MoveFileToRecycleBin',function(req, res){
     // console.log('移动文件到回收站');
     let fileId = req.body.fileId;
-    let userLoginName = req.body.userLoginName;
+    let username = req.body.username;
     if(fileId){
         FileInfo.findOneAndUpdate({
             fileId: fileId,
-            userLoginName: userLoginName,
+            username: username,
         },{
             inRecycleBin:req.body.inRecycleBin
         },function(err,data){
@@ -179,11 +181,11 @@ router.post('/MoveFileToRecycleBin',function(req, res){
 router.post('/DeleteAFlie',function(req,res){
     // console.log('删除回收站的文件夹');
     let fileId = req.body.fileId;
-    let userLoginName = req.body.userLoginName;
+    let username = req.body.username;
     if(fileId){
         FileInfo.findOneAndDelete({
             fileId: fileId,
-            userLoginName: userLoginName,
+            username: username,
             inRecycleBin: true
         },function(err,data){
             if(err){

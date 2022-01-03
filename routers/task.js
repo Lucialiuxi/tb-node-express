@@ -18,11 +18,11 @@ router.use(bodyParser.json())
 
 // 新建任务列表
 router.post('/CreateTaskItem',function(req, res){
-    const { fileId, param: { userLoginName }, arr: defaultTaskItem} = req.body;
+    const { fileId, param: { username }, arr: defaultTaskItem} = req.body;
     // console.log(defaultTaskItem[0])
     if(fileId){
         TaskItem.find({
-            userLoginName:userLoginName,
+            username:username,
             fileId:fileId
         },function(err,adventure){
             // console.log(err,'adventure',adventure,adventure[0])

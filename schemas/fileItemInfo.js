@@ -6,10 +6,10 @@ var Schema = mongoose.Schema;
 
 //每个用户对应的大图标文件区
 module.exports = new Schema({
-    userLoginName:String,
+    username:String,
     fileName:  String,
     fileAbstract: String,
-    fileId: Number,
+    fileId: String,
     star: Boolean,
     inRecycleBin: Boolean
   });

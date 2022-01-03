@@ -5,7 +5,7 @@ var Schema = mongoose.Schema;
 
 //任务列表结构
 module.exports = new Schema({
-    userLoginName:String,//用户的登录名
+    username:String,//用户的登录名
     fileId: Number,//项目文件id
     taskItemId: Number,//任务列表id
     taskItemName: String,//任务列表名
