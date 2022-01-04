@@ -16,7 +16,7 @@ router.use(bodyParser.json())
 //新建文件夹
 router.post('/createFile',function(req, res){
     const { username, fileName, fileAbstract } = req.body;
-    
+    const createTime = new Date().getTime();
     if(fileName){
         FileInfo.create({
             username,
@@ -24,7 +24,8 @@ router.post('/createFile',function(req, res){
             fileAbstract,
             fileId: uuidv1(),
             star: false,
-            inRecycleBin: false
+            inRecycleBin: false,
+            createTime: new Date().getTime(),
         },function(err,data){
             if(err){//错误
                 commonResponse(res, false, null, undefined, err);
